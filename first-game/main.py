@@ -13,9 +13,9 @@ FPS = 60
 
 # Making sprites
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
-    os.path.join('first game', 'Assets', 'spaceship_yellow.png'))
+    os.path.join('first-game', 'Assets', 'spaceship_yellow.png'))
 RED_SPACESHIP_IMAGE = pygame.image.load(
-    os.path.join('first game', 'Assets', 'spaceship_red.png'))
+    os.path.join('first-game', 'Assets', 'spaceship_red.png'))
 
 # NoTE: Order matters, fill in background first, then sprites
 def draw_window():
