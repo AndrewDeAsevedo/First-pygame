@@ -10,19 +10,22 @@ WHITE = (255, 255, 255)
 
 # Used to determine FPS, peep the clock variable and the clock.tick
 FPS = 60
+SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
 
 # Making sprites
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
     os.path.join( 'Assets', 'spaceship_yellow.png'))
+YELLOW_SPACESHIP = pygame.transform.scale(YELLOW_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT))
 RED_SPACESHIP_IMAGE = pygame.image.load(
     os.path.join( 'Assets', 'spaceship_red.png'))
+RED_SPACESHIP = pygame.transform.scale(RED_SPACESHIP_IMAGE, (SPACESHIP_WIDTH,SPACESHIP_HEIGHT))
 
 # NoTE: Order matters, fill in background first, then sprites
 def draw_window():
     WIN.fill(WHITE)
     # Blit draws a surface onto the screen WIN.blit(image, position)
     # Note about positioning, 0,0 is top left of screen, not center
-    WIN.blit(YELLOW_SPACESHIP_IMAGE, (300, 100))
+    WIN.blit(YELLOW_SPACESHIP, (300, 100))
     pygame.display.update()
 
 
