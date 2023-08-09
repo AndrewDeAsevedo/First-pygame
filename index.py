@@ -14,7 +14,9 @@ BORDER = pygame.Rect(445, 0, 10, HEIGHT)
 # Used to determine FPS, peep the clock variable and the clock.tick
 FPS = 60
 VEL = 5
+BULLET_VEL = 7
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
+MAX_BULLETS = 5
 
 # Making sprites
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
@@ -45,26 +47,38 @@ def yellow_handle_movement(keys_pressed, yellow):
             yellow.x += VEL
         if keys_pressed[pygame.K_w] and yellow.y - VEL > 0:  # Up
             yellow.y -= VEL
-        if keys_pressed[pygame.K_s] and yellow.y + VEL + yellow.height < HEIGHT - 15: # Down
+        if keys_pressed[pygame.K_s] and yellow.y + VEL + yellow.height < HEIGHT: # Down
             yellow.y += VEL
 
 def red_handle_movement(keys_pressed, red):
  # How to get keys pressed
-        if keys_pressed[pygame.K_LEFT]: # Left
+        if keys_pressed[pygame.K_LEFT] and red.x - VEL > BORDER.x: # Left
             red.x -= VEL
-        if keys_pressed[pygame.K_RIGHT]: # Right
+        if keys_pressed[pygame.K_RIGHT] and red.x + VEL + red.width  < 900: # Right
             red.x += VEL
-        if keys_pressed[pygame.K_UP]: # Up
+        if keys_pressed[pygame.K_UP] and red.y - VEL > 0: # Up
             red.y -= VEL
-        if keys_pressed[pygame.K_DOWN]: # Down
+        if keys_pressed[pygame.K_DOWN] and red.y + VEL + red.height < HEIGHT: # Down
             red.y += VEL
+
+def handle_bullets(yellow_bullets, red_bullets, yellow, red):
+    for bullet in yellow_bullets:
+        bullet.x += BULLET_VEL
+        # Colliderect lets you know if yellow rectangle collides with bullet rectangle
+        if yellow.colliderect(bullet):
+            
+            yellow_bullets.remove(bullet)
+
 
 # This code is so that when you click the x, it exits.
 # Good practice is to draw your screen in a different function so you just call it in main
 def main():
-    red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
-    yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    red = pygame.Rect(700, 300,SPACESHIP_HEIGHT , SPACESHIP_WIDTH)
+    yellow = pygame.Rect(100, 300, SPACESHIP_HEIGHT, SPACESHIP_WIDTH)
     # This code creates a rectangle on previous space ships, with the x and y position then you specify its height and width
+
+    red_bullets = []
+    yellow_bullets = []
 
     clock = pygame.time.Clock()
     run = True
@@ -74,11 +88,19 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
+            if event.type == pygame.KEYDOWN:
+                 if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
+                    bullet = pygame.Rect(yellow.x + yellow.width, yellow.y + yellow.height/2 -2, 10, 5)
+                    yellow_bullets.append(bullet)
+
+                 if event.key == pygame.K_RCTRL and len(red_bullets) < MAX_BULLETS:
+                    bullet = pygame.Rect(red.x, red.y + red.height/2 -2, 10, 5)
+                    red_bullets.append(bullet)   
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
         red_handle_movement(keys_pressed, red)
 
-
+        handle_bullets(yellow_bullets, red_bullets, yellow, red)
 
         ##everytime this loop happens, it is going to draw window
         draw_window(red, yellow)
